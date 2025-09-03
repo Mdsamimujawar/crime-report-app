@@ -47,11 +47,14 @@ export default function Dashboard() {
     }
   };
 
-  const filteredReports = reports.filter((report) => {
-    const statusMatch = filter === "ALL" || report.status === filter;
-    const typeMatch = typeFilter === "ALL" || report.type === typeFilter;
-    return statusMatch && typeMatch;
-  });
+      const filteredReports = Array.isArray(reports)
+      ? reports.filter((report) => {
+      const statusMatch = filter === "ALL" || report.status === filter;
+      const typeMatch = typeFilter === "ALL" || report.type === typeFilter;
+      return statusMatch && typeMatch;
+
+  })
+      : [];
 
   const getStatusColor = (status: ReportStatus) => {
     const colors = {
@@ -64,21 +67,23 @@ export default function Dashboard() {
   };
 
   // Simple stats
+  const safeReports = Array.isArray(reports) ? reports : [];
+
   const stats = [
-    { label: "Total", value: reports.length },
     {
       label: "Pending",
-      value: reports.filter((r) => r.status === "PENDING").length,
+      value: safeReports.filter((r) => r.status === "PENDING").length,
     },
     {
       label: "In Progress",
-      value: reports.filter((r) => r.status === "IN_PROGRESS").length,
+      value: safeReports.filter((r) => r.status === "IN_PROGRESS").length,
     },
     {
       label: "Resolved",
-      value: reports.filter((r) => r.status === "RESOLVED").length,
+      value: safeReports.filter((r) => r.status === "RESOLVED").length,
     },
   ];
+
 
   if (isLoading) {
     return (

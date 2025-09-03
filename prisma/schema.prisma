@@ -49,3 +49,21 @@ enum Role {
   MODERATOR
   USER
 } 
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(255)
+  message   String   @db.Text
+  status    ContactStatus @default(RECEIVED)
+  ip        String?  @db.VarChar(45)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContactStatus {
+  RECEIVED
+  READ
+  RESPONDED
+  CLOSED
+}
